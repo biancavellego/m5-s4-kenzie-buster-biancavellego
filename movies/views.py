@@ -28,13 +28,16 @@ class MovieView(APIView, PageNumberPagination):
         # What happens: validated_data["new_argument"] = new_argument.
         # However they still need to be truly validated first.
         # Just adding user_id=request.user.id also works.
-        serializer.save(user_id=request.user.id)
+        serializer.save(user=request.user)
 
         # added_by=request.user.email
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
 class MovieDetailView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsEmployeeOrReadOnly]
+
     def get(self, request: Request, movie_id: id) -> Response:
         movie = get_object_or_404(Movie, id=movie_id)
         serializer = MovieSerializer(instance=movie)

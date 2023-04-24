@@ -20,12 +20,12 @@ class Movie(models.Model):
     # User -> Movie (1:N)
     # And on the "Many" side of the relationship we add the FK:
     user = models.ForeignKey(
-        "movies.Movie",
+        "users.User",
         on_delete=models.CASCADE,
         related_name="movies",
         # Optional: just explicitly declaring that a movie needs a user:
         null=False,
     )
 
-    def __repr__(self) -> str:
-        return f"<Movie: ({self.id}) - {self.title} - {self.duration} - {self.rating} - {self.synopsis}>"
+    # def __repr__(self) -> str:
+    #     return f"<Movie: ({self.id}) - {self.title} - {self.duration} - {self.rating} - {self.synopsis}>"

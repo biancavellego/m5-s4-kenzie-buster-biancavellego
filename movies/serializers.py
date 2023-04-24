@@ -18,12 +18,9 @@ class MovieSerializer(serializers.Serializer):
 
     def get_added_by(self, obj):
         # Access user email from token payload
-        email = self.context["request"].email
-        return email
+        # email = self.context["request"].email
+        return obj.user.email
 
     def create(self, validated_data: dict):
-        user = self.context["request"].user
-        movie = Movie.objects.create(**validated_data)
-        movie.user = user
-        movie.save()
-        return movie
+        print(validated_data)
+        return Movie.objects.create(**validated_data)
