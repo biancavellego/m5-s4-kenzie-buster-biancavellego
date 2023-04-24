@@ -1,6 +1,21 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from users.views import User
+
+
+class CustomJWTSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token["email"] = user.email
+
+        return token
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=150, write_only=True)
+    password = serializers.CharField(max_length=127, write_only=True)
 
 
 # Code class (class that does almost everything):
@@ -22,7 +37,7 @@ class UserSerializer(serializers.Serializer):
     is_superuser = serializers.BooleanField(read_only=True)
     # Custom attributes:
     email = serializers.EmailField(
-        # required=True,
+        required=True,
         max_length=127,
         validators=[
             UniqueValidator(
@@ -37,7 +52,7 @@ class UserSerializer(serializers.Serializer):
     is_employee = serializers.BooleanField(allow_null=True, default=False)
 
     def validate(self, value):
-        if value.get("is_employee"):
+        if value["is_employee"] == True:
             value["is_superuser"] = True
         else:
             value["is_superuser"] = False

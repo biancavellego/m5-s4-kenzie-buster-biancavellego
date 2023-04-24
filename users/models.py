@@ -8,3 +8,6 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=50)
     birthdate = models.DateField(null=True)
     is_employee = models.BooleanField(null=True, default=False)
+
+    def __repr__(self) -> str:
+        return f"<User: ({self.id}) - {self.email} - {self.first_name} - {self.last_name} - {self.birthdate} - {self.is_employee}>"

@@ -36,6 +36,7 @@ THIRD_PARTY_APPS = [
 
 MY_APPS = [
     "users",
+    "movies",
 ]
 
 DJANGO_APPS = [
@@ -132,7 +133,10 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Default settings: from django.contrib.auth.models import User
+# OBS:
+# The login token references AUTH_USER_MODEL.
+# Default settings if AUTH_USER_MODEL = "users.User" is not declared:
+# from django.contrib.auth.models import User
 AUTH_USER_MODEL = "users.User"
 
 REST_FRAMEWORK = {

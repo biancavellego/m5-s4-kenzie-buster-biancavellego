@@ -2,7 +2,13 @@ from rest_framework.views import APIView, Request, Response, status
 from users.models import User
 from users.serializers import UserSerializer
 from rest_framework.pagination import PageNumberPagination
+from rest_framework_simplejwt.views import TokenObtainPairView
+from users.serializers import CustomJWTSerializer
 import ipdb
+
+
+class LoginJWTView(TokenObtainPairView):
+    serializer_class = CustomJWTSerializer
 
 
 class UserView(APIView, PageNumberPagination):
