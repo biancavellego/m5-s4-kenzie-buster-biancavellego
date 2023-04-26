@@ -20,7 +20,7 @@ class MovieView(APIView, PageNumberPagination):
         return self.get_paginated_response(serializer.data)
 
     def post(self, request: Request) -> Response:
-        serializer = MovieSerializer(data=request.data, context={"request": request})
+        serializer = MovieSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         # OBS:
@@ -30,7 +30,6 @@ class MovieView(APIView, PageNumberPagination):
         # Just adding user_id=request.user.id also works.
         serializer.save(user=request.user)
 
-        # added_by=request.user.email
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
@@ -38,13 +37,13 @@ class MovieDetailView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsEmployeeOrReadOnly]
 
-    def get(self, request: Request, movie_id: id) -> Response:
+    def get(self, request: Request, movie_id: int) -> Response:
         movie = get_object_or_404(Movie, id=movie_id)
         serializer = MovieSerializer(instance=movie)
 
         return Response(serializer.data, status.HTTP_200_OK)
 
-    def delete(self, request: Request, movie_id: id) -> Response:
+    def delete(self, request: Request, movie_id: int) -> Response:
         movie = get_object_or_404(Movie, id=movie_id)
         movie.delete()
 

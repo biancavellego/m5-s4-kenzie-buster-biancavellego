@@ -52,7 +52,7 @@ class UserSerializer(serializers.Serializer):
     is_employee = serializers.BooleanField(allow_null=True, default=False)
 
     def validate(self, value):
-        if value["is_employee"] == True:
+        if value.get("is_employee", False):
             value["is_superuser"] = True
         else:
             value["is_superuser"] = False
@@ -61,3 +61,18 @@ class UserSerializer(serializers.Serializer):
 
     def create(self, validated_data: dict) -> User:
         return User.objects.create_user(**validated_data)
+
+    def update(self, instance: User, validated_data: dict) -> User:
+        # 6th - Updating (instance receives the new values for each key):
+        for key, value in validated_data.items():
+            if key == "password":
+                instance.set_password(value)
+            else:
+                setattr(instance, key, value)
+
+        # 7th - Saving the instance (this save method is from vanilla django
+        # and references the model itself):
+        instance.save()
+
+        # 8th - Returning the instance:
+        return instance

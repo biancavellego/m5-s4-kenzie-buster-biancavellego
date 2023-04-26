@@ -1,7 +1,5 @@
 from rest_framework import serializers
 from movies.models import Movie, Rating
-from users.serializers import UserSerializer
-from rest_framework.fields import CurrentUserDefault
 
 
 class MovieSerializer(serializers.Serializer):
@@ -13,14 +11,11 @@ class MovieSerializer(serializers.Serializer):
     # If you'd like to add user on the response:
     # user = UserSerializer(read_only=True)
 
-    # Adding a read_only field that will show a value you like:
-    added_by = serializers.SerializerMethodField(method_name="get_added_by")
+    # Adding a read_only field that will show a value you want:
+    added_by = serializers.SerializerMethodField()
 
     def get_added_by(self, obj):
-        # Access user email from token payload
-        # email = self.context["request"].email
         return obj.user.email
 
     def create(self, validated_data: dict):
-        print(validated_data)
         return Movie.objects.create(**validated_data)

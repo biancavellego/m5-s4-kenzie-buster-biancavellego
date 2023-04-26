@@ -1,4 +1,5 @@
 from django.db import models
+from movies_orders.models import MovieOrder
 
 
 class Rating(models.TextChoices):
@@ -27,5 +28,13 @@ class Movie(models.Model):
         null=False,
     )
 
-    # def __repr__(self) -> str:
-    #     return f"<Movie: ({self.id}) - {self.title} - {self.duration} - {self.rating} - {self.synopsis}>"
+    # Movie and User will have a ManyToMany relation:
+    orders = models.ManyToManyField(
+        "users.User",
+        # Through which table this relation is happening (i.e. the custom pivot table):
+        through="movies_orders.MovieOrder",
+        related_name="ordered_movies",
+    )
+
+    def __repr__(self) -> str:
+        return f"<Movie: ({self.id}) - {self.title} - {self.duration} - {self.rating} - {self.synopsis}>"
