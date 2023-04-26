@@ -66,6 +66,7 @@ class UserSerializer(serializers.Serializer):
         # 6th - Updating (instance receives the new values for each key):
         for key, value in validated_data.items():
             if key == "password":
+                # hashing password:
                 instance.set_password(value)
             else:
                 setattr(instance, key, value)
